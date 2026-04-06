@@ -3,6 +3,9 @@ import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 
 import dotenv from "dotenv";
+
+import { errorHandler } from "./middlewares/errorHandler.js";
+
 dotenv.config();
 
 const app = express();
@@ -14,6 +17,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRoutes);
+
+app.use(errorHandler);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(
