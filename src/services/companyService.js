@@ -45,3 +45,36 @@ export const deleteCompany = async (id_company) => {
   if (error) throw new Error(error.message);
   return { message: "Empresa desactivada correctamente" };
 };
+
+export const uploadLogoCompany = async (id_company, file) => {
+  const fileName = `${id_company}-${Date.now()}.${file.mimetype.split("/")[1]}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("logos")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: true,
+    });
+
+  if (uploadError) throw uploadError;
+
+  const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+
+  const { error: dbError } = await supabase
+    .from("companies")
+    .update({ logo_url: data.publicUrl })
+    .eq("id_company", id_company);
+
+  if (dbError) throw dbError;
+
+  return { message: "Logo actualizado", logo_url: data.publicUrl };
+};
+
+export const getBenefitsById = async (id_company) => {
+  const { data, error } = await supabase
+    .from("company_benefits")
+    .select("benefit")
+    .eq("company_id", id_company);
+  if (error) throw new Error(error.message);
+  return data;
+};
