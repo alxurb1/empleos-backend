@@ -1,6 +1,8 @@
 import express from "express";
 
 import userRoutes from "./routes/userRoutes.js";
+import companyRoutes from "./routes/companyRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 import dotenv from "dotenv";
 
@@ -17,6 +19,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRoutes);
+app.use("/companies", companyRoutes);
+app.use("/register", authRoutes);
 
 app.use(errorHandler);
 
