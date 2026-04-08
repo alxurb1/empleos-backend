@@ -29,15 +29,6 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
-export const postUser = async (req, res, next) => {
-  try {
-    const result = await userService.postCreateUser(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    return next(error);
-  }
-};
-
 export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
