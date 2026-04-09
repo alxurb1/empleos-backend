@@ -48,3 +48,36 @@ export const deleteCompany = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const getCompanyValues = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    // Llamamos a la función que crearemos en el servicio
+    const result = await companyService.getCompanyValues(id); 
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const addCompanyValue = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await companyService.addCompanyValue(id, req.body);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteCompanyValue = async (req, res, next) => {
+  try {
+    const { id, valueId } = req.params;
+    
+    const result = await companyService.deleteCompanyValue(id, valueId);
+    
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};

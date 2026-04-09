@@ -45,3 +45,44 @@ export const deleteCompany = async (id_company) => {
   if (error) throw new Error(error.message);
   return { message: "Empresa desactivada correctamente" };
 };
+
+export const getCompanyValues = async (id_company) => {
+  const { data, error } = await supabase
+    .from("company_values")
+    .select("*")
+    .eq("company_id", id_company);
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const addCompanyValue = async (id_company, dataValue) => {
+  const { data, error } = await supabase
+    .from("company_values")
+    .insert([
+      { 
+        company_id: id_company, 
+        value_name: dataValue.value_name 
+      }
+    ])
+    .select() 
+    .single(); 
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const deleteCompanyValue = async (id_company, value_id) => {
+  const { data, error } = await supabase
+    .from("company_values")
+    .delete()
+    .eq("id", value_id)
+    .eq("company_id", id_company) 
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  
+  return { 
+    message: "Valor corporativo eliminado correctamente", 
+    deleted_value: data 
+  };
+};
