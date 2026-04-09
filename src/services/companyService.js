@@ -36,16 +36,6 @@ export const putUpdateCompany = async (id_company, dataCompany) => {
   return data;
 };
 
-export const deleteCompany = async (id_company) => {
-  const { error } = await supabase
-    .from("companies")
-    .update({ is_active: false })
-    .eq("id_company", id_company);
-
-  if (error) throw new Error(error.message);
-  return { message: "Empresa desactivada correctamente" };
-};
-
 export const getCompanyValues = async (id_company) => {
   const { data, error } = await supabase
     .from("company_values")
@@ -59,13 +49,13 @@ export const addCompanyValue = async (id_company, dataValue) => {
   const { data, error } = await supabase
     .from("company_values")
     .insert([
-      { 
-        company_id: id_company, 
-        value_name: dataValue.value_name 
-      }
+      {
+        company_id: id_company,
+        value_name: dataValue.value_name,
+      },
     ])
-    .select() 
-    .single(); 
+    .select()
+    .single();
   if (error) throw new Error(error.message);
   return data;
 };
@@ -75,14 +65,14 @@ export const deleteCompanyValue = async (id_company, value_id) => {
     .from("company_values")
     .delete()
     .eq("id", value_id)
-    .eq("company_id", id_company) 
+    .eq("company_id", id_company)
     .select()
     .single();
 
   if (error) throw new Error(error.message);
-  
-  return { 
-    message: "Valor corporativo eliminado correctamente", 
-    deleted_value: data 
+
+  return {
+    message: "Valor corporativo eliminado correctamente",
+    deleted_value: data,
   };
 };

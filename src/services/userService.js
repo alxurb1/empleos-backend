@@ -40,13 +40,3 @@ export const putUpdateUser = async (id, dataUser) => {
   if (error) throw new Error(error.message);
   return data;
 };
-
-export const deleteUser = async (id) => {
-  const { error } = await supabase
-    .from("users")
-    .update({ is_active: false })
-    .eq("id_user", id);
-
-  if (error) throw new Error(error.message);
-  return { message: "Usuario desactivado correctamente" };
-};

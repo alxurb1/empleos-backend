@@ -5,6 +5,7 @@ import companyRoutes from "./routes/companyRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import vacancyRoutes from "./routes/vacancyRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 import dotenv from "dotenv";
 
