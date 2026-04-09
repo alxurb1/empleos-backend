@@ -78,3 +78,22 @@ export const getBenefitsById = async (id_company) => {
   if (error) throw new Error(error.message);
   return data;
 };
+
+export const addCompanyBenefitsById = async (id_company, benefit) => {
+  const { data, error } = await supabase
+    .from("company_benefits")
+    .insert({ company_id: id_company, benefit });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const deleteCompanyBenefitById = async (id_benefit, id_company) => {
+  const { data, error } = await supabase
+    .from("company_benefits")
+    .update({ is_active: false })
+    .eq("id", id_benefit)
+    .eq("company_id", id_company);
+
+  if (error) throw new Error(error.message);
+  return data;
+};

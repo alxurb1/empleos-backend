@@ -16,4 +16,11 @@ router.post("/:id/logo", upload.single("logo"), companyController.uploadLogo);
 
 router.get("/:id/benefits", companyController.getCompanyBenefitsById);
 
+router.post("/:id/benefits", companyController.addCompanyBenefits);
+
+router.delete(
+  "/:id/benefits/:benefitId",
+  companyController.deleteCompanyBenefit,
+);
+
 export default router;

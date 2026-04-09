@@ -76,3 +76,28 @@ export const getCompanyBenefitsById = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const addCompanyBenefits = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { benefit } = req.body;
+    const result = await companyService.addCompanyBenefitsById(id, benefit);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteCompanyBenefit = async (req, res, next) => {
+  try {
+    const { id: id_company, benefitId: id_benefit } = req.params;
+    const result = await companyService.deleteCompanyBenefitById(
+      id_benefit,
+      id_company,
+    );
+
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
