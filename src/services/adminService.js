@@ -21,7 +21,7 @@ export const deleteCompany = async (id_company) => {
 };
 
 export const getAllJobs = async () => {
-  const { data, error } = await supabase.from("vacancies");
+  const { data, error } = await supabase.from("vacancies").select("*");
   if (error) {
     throw new Error(error.message);
   }
