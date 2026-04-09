@@ -1,4 +1,6 @@
 import * as adminService from "../services/adminService.js";
+import * as userService from "../services/userService.js";
+import * as companyService from "../services/companyService.js";
 
 export const deleteUser = async (req, res, next) => {
   try {
