@@ -22,5 +22,8 @@ router.delete(
   "/:id/benefits/:benefitId",
   companyController.deleteCompanyBenefit,
 );
+router.get("/:id/values", companyController.getCompanyValues);
+router.post("/:id/values", companyController.addCompanyValue);
+router.delete("/:id/values/:valueId", companyController.deleteCompanyValue);
 
 export default router;

@@ -53,13 +53,11 @@ export const uploadLogo = async (req, res, next) => {
   try {
     const { id } = req.params;
     const file = req.file;
-
     if (!file) {
       const error = new Error("No se envió ningun archivo");
       error.statusCode = 400;
       return next(error);
     }
-
     const result = await companyService.uploadLogoCompany(id, file);
     res.json(result);
   } catch (error) {
@@ -95,7 +93,36 @@ export const deleteCompanyBenefit = async (req, res, next) => {
       id_benefit,
       id_company,
     );
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
 
+export const getCompanyValues = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await companyService.getCompanyValues(id);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const addCompanyValue = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await companyService.addCompanyValue(id, req.body);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteCompanyValue = async (req, res, next) => {
+  try {
+    const { id, valueId } = req.params;
+    const result = await companyService.deleteCompanyValue(id, valueId);
     res.json(result);
   } catch (error) {
     return next(error);
