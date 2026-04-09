@@ -25,6 +25,7 @@ app.use("/companies", companyRoutes);
 app.use("/register", authRoutes);
 app.use("/vacancy", vacancyRoutes);
 app.use("/", applicationRoutes);
+app.use("/admin", adminRoutes);
 
 app.use(errorHandler);
 
