@@ -49,11 +49,60 @@ export const deleteCompany = async (req, res, next) => {
   }
 };
 
+export const uploadLogo = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const file = req.file;
+    if (!file) {
+      const error = new Error("No se envió ningun archivo");
+      error.statusCode = 400;
+      return next(error);
+    }
+    const result = await companyService.uploadLogoCompany(id, file);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getCompanyBenefitsById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await companyService.getBenefitsById(id);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const addCompanyBenefits = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { benefit } = req.body;
+    const result = await companyService.addCompanyBenefitsById(id, benefit);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteCompanyBenefit = async (req, res, next) => {
+  try {
+    const { id: id_company, benefitId: id_benefit } = req.params;
+    const result = await companyService.deleteCompanyBenefitById(
+      id_benefit,
+      id_company,
+    );
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const getCompanyValues = async (req, res, next) => {
   try {
     const { id } = req.params;
-    // Llamamos a la función que crearemos en el servicio
-    const result = await companyService.getCompanyValues(id); 
+    const result = await companyService.getCompanyValues(id);
     res.json(result);
   } catch (error) {
     return next(error);
@@ -73,9 +122,7 @@ export const addCompanyValue = async (req, res, next) => {
 export const deleteCompanyValue = async (req, res, next) => {
   try {
     const { id, valueId } = req.params;
-    
     const result = await companyService.deleteCompanyValue(id, valueId);
-    
     res.json(result);
   } catch (error) {
     return next(error);
