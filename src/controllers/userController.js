@@ -38,13 +38,3 @@ export const updateUser = async (req, res, next) => {
     return next(error);
   }
 };
-
-export const deleteUser = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await userService.deleteUser(id);
-    res.json(result);
-  } catch (error) {
-    return next(error);
-  }
-};
