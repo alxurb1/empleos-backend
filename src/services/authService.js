@@ -1,4 +1,3 @@
-// authService.js
 import { supabase, supabaseAdmin } from "../db.js";
 
 export const registerCandidate = async (dataUser) => {
