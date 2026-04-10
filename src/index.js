@@ -5,6 +5,7 @@ import companyRoutes from "./routes/companyRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import vacancyRoutes from "./routes/vacancyRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
+import resourcesRoutes from "./routes/resourcesRoutes.js";
 
 import dotenv from "dotenv";
 
@@ -25,6 +26,7 @@ app.use("/companies", companyRoutes);
 app.use("/register", authRoutes);
 app.use("/vacancy", vacancyRoutes);
 app.use("/", applicationRoutes);
+app.use("/resources", resourcesRoutes);
 
 app.use(errorHandler);
 
