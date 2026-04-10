@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import vacancyRoutes from "./routes/vacancyRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import resourcesRoutes from "./routes/resourcesRoutes.js";
+import forumRoutes from './routes/forumRoutes.js';
 
 import dotenv from "dotenv";
 
@@ -27,6 +28,7 @@ app.use("/register", authRoutes);
 app.use("/vacancy", vacancyRoutes);
 app.use("/", applicationRoutes);
 app.use("/resources", resourcesRoutes);
+app.use('/forum/posts', forumRoutes);
 
 app.use(errorHandler);
 
