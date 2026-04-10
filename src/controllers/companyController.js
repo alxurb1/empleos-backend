@@ -128,3 +128,13 @@ export const deleteCompanyValue = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const getCompanyRating = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await companyService.getCompanyRating(id);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
