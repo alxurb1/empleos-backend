@@ -25,4 +25,6 @@ router.get("/:id/values", companyController.getCompanyValues);
 router.post("/:id/values", companyController.addCompanyValue);
 router.delete("/:id/values/:valueId", companyController.deleteCompanyValue);
 
+router.get('/:id/rating', companyController.getCompanyRating);
+
 export default router;

@@ -126,3 +126,29 @@ export const deleteCompanyValue = async (id_company, value_id) => {
     deleted: data,
   };
 };
+
+export const getCompanyRating = async (id_company) => {
+  const { data, error } = await supabase
+    .from("company_reviews")
+    .select("rating")
+    .eq("company_id", id_company); 
+
+  if (error) throw new Error(error.message);
+
+  if (data.length === 0) {
+    return { 
+      average_rating: 0, 
+      total_reviews: 0 
+    };
+  }
+
+  const totalReviews = data.length;
+  const sumRatings = data.reduce((acumulador, reseña) => acumulador + reseña.rating, 0);
+  
+  const averageRating = (sumRatings / totalReviews).toFixed(1); 
+
+  return {
+    average_rating: parseFloat(averageRating),
+    total_reviews: totalReviews
+  };
+};
