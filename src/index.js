@@ -7,8 +7,9 @@ import vacancyRoutes from "./routes/vacancyRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import resourcesRoutes from "./routes/resourcesRoutes.js";
-import forumRoutes from './routes/forumRoutes.js';
-import reviewRoutes from './routes/reviewRoutes.js';
+import forumRoutes from "./routes/forumRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 import dotenv from "dotenv";
 
@@ -31,8 +32,9 @@ app.use("/vacancy", vacancyRoutes);
 app.use("/", applicationRoutes);
 app.use("/admin", adminRoutes);
 app.use("/resources", resourcesRoutes);
-app.use('/forum/posts', forumRoutes);
-app.use('/reviews', reviewRoutes);
+app.use("/forum/posts", forumRoutes);
+app.use("/reviews", reviewRoutes);
+app.use("/me", profileRoutes);
 
 app.use(errorHandler);
 
