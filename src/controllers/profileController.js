@@ -58,7 +58,10 @@ export const getCV = async (req, res, next) => {
 export const postCV = async (req, res, next) => {
   try {
     const { id_user } = req.params;
-    const result = await profileService.uploadCV(id_user, req.body);
+    if (!req.file) {
+      return res.status(400).json({ message: "No se recibió ningún archivo" });
+    }
+    const result = await profileService.uploadCV(id_user, req.file);
     res.status(201).json(result);
   } catch (error) {
     return next(error);

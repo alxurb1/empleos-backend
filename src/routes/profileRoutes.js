@@ -1,5 +1,5 @@
 import * as profileController from "../controllers/profileController.js";
-
+import { uploadCV } from "../middlewares/upload.js";
 import { Router } from "express";
 
 const router = Router();
@@ -13,7 +13,7 @@ router.put("/experience/:id_experience", profileController.putExperience);
 router.delete("/experience/:id_experience", profileController.deleteExperience);
 
 router.get("/:id_user/cv", profileController.getCV);
-router.post("/:id_user/cv", profileController.postCV);
+router.post("/:id_user/cv", uploadCV.single("cv"), profileController.postCV);
 router.delete("/cv/:id_cv", profileController.deleteCV);
 
 router.get("/:id_user/skills", profileController.getSkills);

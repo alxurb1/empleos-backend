@@ -67,11 +67,32 @@ export const getCVByUser = async (id_user) => {
   return data;
 };
 
-export const uploadCV = async (id_user, dataCV) => {
-  const { file_url, file_name, file_size_kb = null } = dataCV;
+export const uploadCV = async (id_user, file) => {
+  const fileName = `${id_user}_${Date.now()}_${file.originalname}`;
+
+  const { data: storageData, error: storageError } = await supabaseAdmin.storage
+    .from("cvs")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: false,
+    });
+
+  if (storageError) throw storageError;
+
+  const { data: urlData } = supabaseAdmin.storage
+    .from("cvs")
+    .getPublicUrl(fileName);
+
   const { data, error } = await supabaseAdmin
     .from("cvs")
-    .insert([{ id_user, file_url, file_name, file_size_kb }])
+    .insert([
+      {
+        id_user,
+        file_url: urlData.publicUrl,
+        file_name: file.originalname,
+        file_size_kb: Math.round(file.size / 1024),
+      },
+    ])
     .select()
     .single();
 
