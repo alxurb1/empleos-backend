@@ -17,3 +17,30 @@ export const registerCompany = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const loginCandidate = async (req, res, next) => {
+  try {
+    const result = await authService.loginCandidate(req.body);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const loginCompany = async (req, res, next) => {
+  try {
+    const result = await authService.loginCompany(req.body);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    const result = await authService.logout(req.body);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
