@@ -110,3 +110,58 @@ export const registerCompany = async (dataCompany) => {
 
   return { user: userData, company: companyData };
 };
+
+export const loginCandidate = async (dataUser) => {
+  const { email, password } = dataUser;
+
+  const { data: authUserData, error: authUserError } =
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: {
+        shouldCreateUser: false,
+      },
+    });
+
+  if (authUserError) throw new Error(authUserError.message);
+
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from("users")
+    .select()
+    .eq("id_user", authUserData.user.id)
+    .single();
+
+  if (userError) throw new Error(userError.message);
+
+  return userData;
+};
+
+export const loginCompany = async (dataCompany) => {
+  const { email, password } = dataCompany;
+
+  const { data: authData, error: authError } =
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: {
+        shouldCreateUser: false,
+      },
+    });
+  if (authError) throw new Error(authError.message);
+
+  const { data: companyData, error: companyError } = await supabaseAdmin
+    .from("companies")
+    .select()
+    .eq("id_user", authData.user.id)
+    .single();
+
+  if (companyError) throw new Error(companyError.message);
+
+  return companyData;
+};
+
+export const logout = async () => {
+  const { error: logoutCompanyError } = await supabase.auth.signOut();
+
+  if (logoutCompanyError) throw new Error(logoutCompanyError.message);
+};

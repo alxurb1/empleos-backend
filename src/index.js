@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoutes);
 app.use("/companies", companyRoutes);
-app.use("/register", authRoutes);
+app.use("/auth", authRoutes);
 app.use("/vacancy", vacancyRoutes);
 app.use("/", applicationRoutes);
 app.use("/admin", adminRoutes);
