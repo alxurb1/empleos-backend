@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 import userRoutes from "./routes/userRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
@@ -18,6 +19,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 dotenv.config();
 
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 
