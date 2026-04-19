@@ -123,8 +123,6 @@ export const loginCandidate = async (dataUser) => {
       },
     });
 
-  console.log(authUserData.session.access_token);
-
   if (authUserError) throw new Error(authUserError.message);
 
   const { data: userData, error: userError } = await supabaseAdmin
