@@ -19,7 +19,8 @@ export const getCompanyById = async (id_company) => {
   const { data, error } = await supabase
     .from("companies")
     .select("*")
-    .eq("id_company", id_company);
+    .eq("id_company", id_company)
+    .single();
   if (error) throw new Error(error.message);
   return data;
 };
@@ -131,24 +132,27 @@ export const getCompanyRating = async (id_company) => {
   const { data, error } = await supabase
     .from("company_reviews")
     .select("rating")
-    .eq("company_id", id_company); 
+    .eq("company_id", id_company);
 
   if (error) throw new Error(error.message);
 
   if (data.length === 0) {
-    return { 
-      average_rating: 0, 
-      total_reviews: 0 
+    return {
+      average_rating: 0,
+      total_reviews: 0,
     };
   }
 
   const totalReviews = data.length;
-  const sumRatings = data.reduce((acumulador, reseña) => acumulador + reseña.rating, 0);
-  
-  const averageRating = (sumRatings / totalReviews).toFixed(1); 
+  const sumRatings = data.reduce(
+    (acumulador, reseña) => acumulador + reseña.rating,
+    0,
+  );
+
+  const averageRating = (sumRatings / totalReviews).toFixed(1);
 
   return {
     average_rating: parseFloat(averageRating),
-    total_reviews: totalReviews
+    total_reviews: totalReviews,
   };
 };
