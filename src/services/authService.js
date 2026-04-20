@@ -42,7 +42,11 @@ export const registerCandidate = async (dataUser) => {
     .select()
     .single();
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    // Si falla la inserción en nuestra tabla, eliminamos el usuario de Auth para evitar que quede huérfano
+    await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+    throw new Error(error.message);
+  }
   return { userData: data, token: authData.session.access_token };
 };
 
@@ -83,7 +87,10 @@ export const registerCompany = async (dataCompany) => {
     ])
     .select()
     .single();
-  if (userError) throw new Error(userError.message);
+  if (userError) {
+    await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+    throw new Error(userError.message);
+  }
 
   const { data: companyData, error: companyError } = await supabaseAdmin
     .from("companies")
@@ -106,7 +113,13 @@ export const registerCompany = async (dataCompany) => {
     ])
     .select()
     .single();
-  if (companyError) throw new Error(companyError.message);
+
+  if (companyError) {
+    await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+    // Intentamos limpiar también la tabla de users por seguridad
+    await supabaseAdmin.from("users").delete().eq("id_user", authData.user.id);
+    throw new Error(companyError.message);
+  }
 
   return {
     userData: userData,

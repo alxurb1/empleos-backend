@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 import userRoutes from "./routes/userRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
@@ -12,14 +14,32 @@ import forumRoutes from "./routes/forumRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 
-import dotenv from "dotenv";
+import { env } from "./config/env.js";
 
 import { errorHandler } from "./middlewares/errorHandler.js";
 
-dotenv.config();
-
 const app = express();
+
+app.use(helmet());
 app.use(cors());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+});
+
+app.use(limiter);
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  message:
+    "Demasiadas peticiones desde esta IP, por favor intenta de nuevo después de 15 minutos",
+});
+
+app.use("/auth", authLimiter);
 
 app.use(express.json());
 
@@ -40,8 +60,10 @@ app.use("/me", profileRoutes);
 
 app.use(errorHandler);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(
-    `Servidor corriendo en: http://localhost:${process.env.PORT || 3000}`,
-  );
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(env.PORT, () => {
+    console.log(`Servidor corriendo en: http://localhost:${env.PORT}`);
+  });
+}
+
+export default app;
