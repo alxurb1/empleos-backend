@@ -58,3 +58,12 @@ export const updateVacancyStatus = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const searchVacancies = async (req, res, next) => {
+  try {
+    const result = await vacancyService.searchVacancies(req.query);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
