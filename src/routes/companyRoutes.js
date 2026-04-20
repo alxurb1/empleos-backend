@@ -2,12 +2,14 @@ import { Router } from "express";
 
 import * as companyController from "../controllers/companyController.js";
 import { upload } from "../middlewares/upload.js";
-
+import { updateCompanyValidators, runValidations } from "../middlewares/companyValidators.js";
 const router = Router();
 
 router.get("/", companyController.getCompanies);
 router.get("/companiaNombre/:name", companyController.getCompanyByName);
 router.get("/companiaId/:id", companyController.getCompanyById);
+
+router.put("/:id", runValidations(updateCompanyValidators), companyController.updateCompany);
 
 router.put("/:id", companyController.updateCompany);
 
