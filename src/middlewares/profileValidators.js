@@ -22,7 +22,6 @@ export const runValidations = (validations) => {
 
 
 export const updateProfileValidators = [
-  // Nombre: Opcional, pero si trae datos no puede tener números
  body('nombreCompleto')
     .optional({ checkFalsy: true })
     .not().matches(/[0-9]/)
@@ -66,12 +65,10 @@ export const updateProfileValidators = [
 
 
 export const experienceValidators = [
-  // Título del Cargo
   body('job_title')
     .trim()
     .notEmpty().withMessage('El título del cargo es obligatorio'),
 
-  // Empresa
   body('company_name')
     .trim()
     .notEmpty().withMessage('El nombre de la empresa es obligatorio'),
