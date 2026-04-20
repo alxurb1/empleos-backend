@@ -138,3 +138,53 @@ export const putUpdateVacancyStatus = async (id_vacancy, status) => {
   if (error) throw new Error(error.message);
   return data;
 };
+
+export const searchVacancies = async (filters) => {
+  const { keyword, location, type, salary, experience } = filters;
+
+  let query = supabase
+    .from('vacancies')
+    .select('*')
+    .eq('status', 'active'); 
+
+  if (keyword) {
+    query = query.ilike('title', `%${keyword}%`);
+  }
+  
+  if (location) {
+    query = query.ilike('location', `%${location}%`);
+  }
+  
+  if (type) {
+    let dbModality = type.toLowerCase();
+    if (type === 'Remoto') dbModality = 'remote';
+    if (type === 'Presencial') dbModality = 'in_person'; 
+    if (type === 'Hibrido') dbModality = 'hybrid'; 
+    
+    query = query.eq('modality', dbModality);
+  }
+  
+  if (experience) {
+    query = query.eq('experience_level', experience.toLowerCase());
+  }
+  
+  if (salary) {
+    if (salary === '400-600') {
+      query = query.gte('salary_min', 400).lte('salary_max', 600);
+    } else if (salary === '600-1000') {
+      query = query.gte('salary_min', 600).lte('salary_max', 1000);
+    } else if (salary === '1500+') {
+      query = query.gte('salary_min', 1500);
+    }
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  return {
+    status: 'success',
+    results: data.length,
+    data: data
+  };
+};
