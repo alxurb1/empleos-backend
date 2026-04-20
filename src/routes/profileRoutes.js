@@ -1,14 +1,19 @@
+import { Router } from "express";
 import * as profileController from "../controllers/profileController.js";
 import { uploadCV } from "../middlewares/upload.js";
-import { Router } from "express";
+
+import { updateProfileValidators, experienceValidators, runValidations } from '../middlewares/profileValidators.js';
 
 const router = Router();
 
+
 router.get("/:id_user/profile", profileController.getProfile);
-router.put("/:id_user/profile", profileController.putProfile);
+router.put("/:id_user/profile", runValidations(updateProfileValidators), profileController.putProfile);
 
 router.get("/:id_user/experience", profileController.getExperience);
-router.post("/:id_user/experience", profileController.postExperience);
+
+router.post("/:id_user/experience", runValidations(experienceValidators), profileController.postExperience);
+
 router.put("/experience/:id_experience", profileController.putExperience);
 router.delete("/experience/:id_experience", profileController.deleteExperience);
 
