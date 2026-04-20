@@ -43,7 +43,7 @@ export const registerCandidate = async (dataUser) => {
     .single();
 
   if (error) throw new Error(error.message);
-  return data;
+  return { userData: data, token: authData.session.access_token };
 };
 
 export const registerCompany = async (dataCompany) => {
@@ -108,7 +108,11 @@ export const registerCompany = async (dataCompany) => {
     .single();
   if (companyError) throw new Error(companyError.message);
 
-  return { user: userData, company: companyData };
+  return {
+    userData: userData,
+    company: companyData,
+    token: authData.session.access_token,
+  };
 };
 
 export const loginCandidate = async (dataUser) => {
