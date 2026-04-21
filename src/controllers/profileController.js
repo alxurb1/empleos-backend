@@ -100,6 +100,19 @@ export const putProfile = async (req, res, next) => {
   }
 };
 
+export const uploadPhoto = async (req, res, next) => {
+  try {
+    const { id_user } = req.params;
+    if (!req.file) {
+      return res.status(400).json({ message: "No se recibió ningún archivo" });
+    }
+    const result = await profileService.uploadUserPhoto(id_user, req.file);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // ----------------------------------------------------SKILLS-------------------------------------------------------
 
 export const getSkills = async (req, res, next) => {
