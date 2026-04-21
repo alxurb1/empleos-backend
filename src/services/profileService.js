@@ -153,6 +153,34 @@ export const updateProfile = async (id_user, dataProfile) => {
   return data;
 };
 
+export const uploadUserPhoto = async (id_user, file) => {
+  const ext = file.mimetype.split("/")[1] || "jpg";
+  const fileName = `${id_user}.${ext}`;
+
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from("avatars")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: true,
+    });
+
+  if (uploadError) throw uploadError;
+
+  const { data } = supabaseAdmin.storage.from("avatars").getPublicUrl(fileName);
+
+  const { error: dbError } = await supabaseAdmin
+    .from("users")
+    .update({ avatar_url: data.publicUrl })
+    .eq("id_user", id_user);
+
+  if (dbError) throw new Error(dbError.message);
+
+  return {
+    message: "Foto actualizada correctamente",
+    avatar_url: data.publicUrl,
+  };
+};
+
 // ----------------------------------------------------SKILLS-------------------------------------------------------
 export const getSkillsByUser = async (id_user) => {
   const { data, error } = await supabase
