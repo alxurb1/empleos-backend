@@ -11,13 +11,18 @@ export const getReviewsByCompany = async (companyId) => {
 };
 
 export const createReview = async (reviewData) => {
+  const { company_id, user_id, rating, comment } = reviewData;
   const { data, error } = await supabase
     .from("company_reviews")
-    .insert([reviewData])
+    .insert([{ company_id, user_id, rating, comment }])
     .select()
     .single();
-
-  if (error) throw new Error(error.message);
+  if (error) {
+    if (error.code === "23505") {
+      throw new Error("Ya dejaste una reseña para esta empresa");
+    }
+    throw new Error(error.message);
+  }
   return data;
 };
 
