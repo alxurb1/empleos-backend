@@ -1,4 +1,5 @@
 import { supabase, supabaseAdmin } from "../db.js";
+import { ROLES } from "../constants/roles.js";
 
 export const registerCandidate = async (dataUser) => {
   const {
@@ -29,7 +30,7 @@ export const registerCandidate = async (dataUser) => {
         id_user: authData.user.id, //Supabase tiene otra "tabla" con los usuarios que se registran, básicamente es como una FK, manda el id de esa tabla, y pone ese mismo id en esta otra tabla users
         full_name,
         email,
-        role: "candidate",
+        role: ROLES.CANDIDATE,
         phone,
         location,
         linkedin_url,
@@ -82,7 +83,7 @@ export const registerCompany = async (dataCompany) => {
         id_user: authData.user.id,
         full_name,
         email,
-        role: "company",
+        role: ROLES.COMPANY,
       },
     ])
     .select()
@@ -143,6 +144,7 @@ export const loginCandidate = async (dataUser) => {
     .from("users")
     .select()
     .eq("id_user", authUserData.user.id)
+    .eq("role", ROLES.CANDIDATE)
     .single();
   if (userError) throw new Error(userError.message);
   return { userData: userData, token: authUserData.session.access_token };
@@ -159,12 +161,23 @@ export const loginCompany = async (dataCompany) => {
       },
     });
   if (authError) throw new Error(authError.message);
+
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from("users")
+    .select()
+    .eq("id_user", authData.user.id)
+    .eq("role", ROLES.COMPANY)
+    .single();
+  if (userError)
+    throw new Error("No tienes permisos para iniciar sesión como empresa");
+
   const { data: companyData, error: companyError } = await supabaseAdmin
     .from("companies")
     .select()
     .eq("id_user", authData.user.id)
     .single();
   if (companyError) throw new Error(companyError.message);
+
   return { userData: companyData, token: authData.session.access_token };
 };
 
@@ -182,7 +195,7 @@ export const loginAdmin = async (dataAdmin) => {
     .from("users")
     .select()
     .eq("id_user", authData.user.id)
-    .eq("role", "admin")
+    .eq("role", ROLES.ADMIN)
     .single();
   if (adminError) throw new Error(adminError.message);
   return { userData: adminData, token: authData.session.access_token };
