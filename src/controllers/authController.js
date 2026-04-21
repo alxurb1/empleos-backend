@@ -36,6 +36,15 @@ export const loginCompany = async (req, res, next) => {
   }
 };
 
+export const loginAdmin = async (req, res, next) => {
+  try {
+    const result = await authService.loginAdmin(req.body);
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const logout = async (req, res, next) => {
   try {
     const result = await authService.logout(req.body);

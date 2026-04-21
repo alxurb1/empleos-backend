@@ -168,6 +168,26 @@ export const loginCompany = async (dataCompany) => {
   return { userData: companyData, token: authData.session.access_token };
 };
 
+export const loginAdmin = async (dataAdmin) => {
+  const { email, password } = dataAdmin;
+  const { data: authData, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+    options: {
+      shouldCreateUser: false,
+    },
+  });
+  if (error) throw new Error(error.message);
+  const { data: adminData, error: adminError } = await supabaseAdmin
+    .from("users")
+    .select()
+    .eq("id_user", authData.user.id)
+    .eq("role", "admin")
+    .single();
+  if (adminError) throw new Error(adminError.message);
+  return { userData: adminData, token: authData.session.access_token };
+};
+
 export const logout = async () => {
   const { error: logoutCompanyError } = await supabase.auth.signOut();
 
