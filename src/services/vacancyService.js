@@ -1,7 +1,6 @@
 import { supabase, supabaseAdmin } from "../db.js";
 
 export const getAllVacancies = async (filters = {}) => {
-  //Solo devuelve vacantes con status:active, si cambia el status, no se asusten si no aparece en postman
   let query = supabase
     .from("vacancies")
     .select(`*, companies (name, logo_url, sector, location, is_verified)`)
@@ -29,7 +28,7 @@ export const getVacancyById = async (id_vacancy) => {
   const { data, error } = await supabase
     .from("vacancies")
     .select(
-      `*, companies(name, logo_url, sector, size, location, website, email, phone, is_verified)`,
+      `*, companies(id_company, name, logo_url, sector, size, location, website, email, phone, is_verified)`,
     )
     .eq("id_vacancy", id_vacancy)
     .single();
@@ -142,39 +141,36 @@ export const putUpdateVacancyStatus = async (id_vacancy, status) => {
 export const searchVacancies = async (filters) => {
   const { keyword, location, type, salary, experience } = filters;
 
-  let query = supabase
-    .from('vacancies')
-    .select('*')
-    .eq('status', 'active'); 
+  let query = supabase.from("vacancies").select("*").eq("status", "active");
 
   if (keyword) {
-    query = query.ilike('title', `%${keyword}%`);
+    query = query.ilike("title", `%${keyword}%`);
   }
-  
+
   if (location) {
-    query = query.ilike('location', `%${location}%`);
+    query = query.ilike("location", `%${location}%`);
   }
-  
+
   if (type) {
     let dbModality = type.toLowerCase();
-    if (type === 'Remoto') dbModality = 'remote';
-    if (type === 'Presencial') dbModality = 'in_person'; 
-    if (type === 'Hibrido') dbModality = 'hybrid'; 
-    
-    query = query.eq('modality', dbModality);
+    if (type === "Remoto") dbModality = "remote";
+    if (type === "Presencial") dbModality = "in_person";
+    if (type === "Hibrido") dbModality = "hybrid";
+
+    query = query.eq("modality", dbModality);
   }
-  
+
   if (experience) {
-    query = query.eq('experience_level', experience.toLowerCase());
+    query = query.eq("experience_level", experience.toLowerCase());
   }
-  
+
   if (salary) {
-    if (salary === '400-600') {
-      query = query.gte('salary_min', 400).lte('salary_max', 600);
-    } else if (salary === '600-1000') {
-      query = query.gte('salary_min', 600).lte('salary_max', 1000);
-    } else if (salary === '1500+') {
-      query = query.gte('salary_min', 1500);
+    if (salary === "400-600") {
+      query = query.gte("salary_min", 400).lte("salary_max", 600);
+    } else if (salary === "600-1000") {
+      query = query.gte("salary_min", 600).lte("salary_max", 1000);
+    } else if (salary === "1500+") {
+      query = query.gte("salary_min", 1500);
     }
   }
 
@@ -183,8 +179,8 @@ export const searchVacancies = async (filters) => {
   if (error) throw error;
 
   return {
-    status: 'success',
+    status: "success",
     results: data.length,
-    data: data
+    data: data,
   };
 };
